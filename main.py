@@ -16,9 +16,9 @@ def login(sess):
     return 'sessionid' in sess.cookies.keys()
 
 def calculate_pages(sess):
-    # Calculate the number of pages by viewing page 1, and finding the last link to a page. This will be the "go to last page" link and contain the last page num
+    # Calculate the number of pages by viewing page 1, and finding the "go to last page" link
     resp = sess.get('https://gem.fabtcg.com/profile/history/?role=player', headers={'Referer': 'https://gem.fabtcg.com/profile/history/'})
-    matches = re.findall(r'<a href=\"\?role=player&amp;page=([0-9]+)\"', resp.text)
+    matches = re.findall(r'<a href=\"\?role=player&amp;page=([0-9]+)\" class=\"page-link starling\">\s*<span>>></span>', resp.text)
     if len(matches) == 0:
         num_pages = 1
     else:
