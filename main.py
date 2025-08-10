@@ -18,11 +18,12 @@ def login(sess):
 def calculate_pages(sess):
     # Calculate the number of pages by viewing page 1, and finding the "go to last page" link
     resp = sess.get('https://gem.fabtcg.com/profile/history/?role=player', headers={'Referer': 'https://gem.fabtcg.com/profile/history/'})
-    matches = re.findall(r'<a href=\"\?role=player&amp;page=([0-9]+)\" class=\"page-link starling\">\s*<span>>></span>', resp.text)
-    if len(matches) == 0:
-        num_pages = 1
-    else:
-        num_pages = int(matches[-1][0])
+    matches = re.findall(r'href=\"\?role=player&amp;page=([0-9]+)\"', resp.text)
+    num_pages = 1
+    for match in matches:
+        page_num = int(match)
+        if page_num > num_pages:
+            num_pages = page_num
     
     print(f"Number of pages: {num_pages}")
     return num_pages
